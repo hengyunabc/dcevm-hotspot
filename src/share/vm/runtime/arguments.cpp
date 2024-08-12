@@ -3827,6 +3827,17 @@ void Arguments::set_shared_spaces_flags() {
   }
 }
 
+static void force_serial_gc()
+{
+  FLAG_SET_DEFAULT(UseSerialGC, true);
+  FLAG_SET_DEFAULT(CMSIncrementalMode, false); // special CMS suboption
+  UNSUPPORTED_GC_OPTION(UseG1GC);
+  UNSUPPORTED_GC_OPTION(UseParallelGC);
+  UNSUPPORTED_GC_OPTION(UseParallelOldGC);
+  UNSUPPORTED_GC_OPTION(UseConcMarkSweepGC);
+  UNSUPPORTED_GC_OPTION(UseParNewGC);
+}
+
 #if !INCLUDE_ALL_GCS
 static void force_serial_gc() {
   FLAG_SET_DEFAULT(UseSerialGC, true);
@@ -4076,6 +4087,8 @@ jint Arguments::parse(const JavaVMInitArgs* args) {
   // Set object alignment values.
   set_object_alignment();
 
+  // for dcevm
+  force_serial_gc();
 #if !INCLUDE_ALL_GCS
   force_serial_gc();
 #endif // INCLUDE_ALL_GCS
