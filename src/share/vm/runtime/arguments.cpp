@@ -2305,6 +2305,14 @@ bool Arguments::check_vm_args_consistency() {
   // Note: Needs platform-dependent factoring.
   bool status = true;
 
+  // force to use SerialGC for dcevm
+  UseSerialGC = true;
+  UseParallelGC = false;
+  UseParallelOldGC = false;
+  UseParNewGC = false;
+  UseConcMarkSweepGC = false;
+  UseG1GC = false;
+
   // Allow both -XX:-UseStackBanging and -XX:-UseBoundThreads in non-product
   // builds so the cost of stack banging can be measured.
 #if (defined(PRODUCT) && defined(SOLARIS))
